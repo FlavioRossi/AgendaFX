@@ -6,7 +6,6 @@
 package controlador;
 
 import java.net.URL;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,7 +65,6 @@ public class FXML_personaController implements Initializable{
 
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
-        
         table_persona.setItems(mainApp.getPersonaData());
     }
     
@@ -99,6 +97,31 @@ public class FXML_personaController implements Initializable{
             alerta.setContentText("No ha seleccionado ninguna persona");
             alerta.setHeaderText("Por favor seleccione una persona");
             alerta.show();
+        }
+    }
+
+    @FXML
+    private void nuevaPersona(ActionEvent event) {
+        Persona persona = new Persona();
+        boolean resul = mainApp.showEditarPersona(persona);
+        if (resul) {
+            mainApp.getPersonaData().add(persona);
+        }
+    }
+
+    @FXML
+    private void editarPersona(ActionEvent event) {
+        Persona persona = table_persona.getSelectionModel().getSelectedItem();
+        boolean resul = mainApp.showEditarPersona(persona);
+        if (resul) {
+            showDetallePersona(persona);
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Editar Persona");
+            alert.setContentText("No se ha seleccioando ninguna persona");
+            alert.setHeaderText("Por favor seleccione una persona");
+            alert.show();
+            
         }
     }
 }

@@ -10,8 +10,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import modelo.Persona;
 
@@ -39,6 +41,8 @@ public class MainApp extends Application{
     public void start(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
         this.stage.setTitle("Agenda");
+        
+        this.stage.getIcons().add(new Image("File:Resource/Imagenes/icono.png"));
         
         initRootLayout();
         showPersona();
@@ -70,6 +74,30 @@ public class MainApp extends Application{
             controller.setMainApp(this);
         } catch (Exception e) {
             System.out.println("Error al leer 'FXML_persona.fxml'");
+        }
+    }
+    
+    public boolean showEditarPersona(Persona persona){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/vista/FXML_editarPersona.fxml"));
+            AnchorPane fxmlEditarPersona = (AnchorPane) loader.load();
+            
+            FXML_editarPersonaController controller = loader.getController();
+            controller.setPersona(persona);
+            
+            Stage modalStage = new Stage();
+            modalStage.setTitle("Editar persona");
+            modalStage.initModality(Modality.WINDOW_MODAL);
+            modalStage.initOwner(this.stage);
+            modalStage.setScene(new Scene(fxmlEditarPersona));
+            controller.setStage(modalStage);
+            
+            modalStage.showAndWait();
+            return controller.isOk();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
     
